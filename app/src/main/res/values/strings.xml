@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">My First Application</string>
+    <string name="please_login_to_use_the_application">Please login to use the application</string>
+    <string name="enter_email">Enter email</string>
+    <string name="enter_password">Enter password</string>
+    <string name="submit">Submit</string>
+</resources>
