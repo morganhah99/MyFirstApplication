@@ -1,56 +1,97 @@
 package com.example.myfirstapplication
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.google.android.material.snackbar.Snackbar
+import com.example.myfirstapplication.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    val MyTag = "MainActivity"
+
+    var counter = 0
+
+    lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
 
+//        enableEdgeToEdge()
 
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
 
-        val email = findViewById<EditText>(R.id.etUserEmail)
-        val password = findViewById<EditText>(R.id.etUserPassword)
+//        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
+
+//        val email = findViewById<EditText>(R.id.etUserEmail)
+//        val password = findViewById<EditText>(R.id.etUserPassword)
 
 
-        findViewById<Button>(R.id.btnSubmitLogin).setOnClickListener {
-            val submittedEmail = email.text.toString()
-            val submittedPassword = password.text.toString()
-
-            if (verifyEmail(submittedEmail) && verifyPassword(submittedPassword)) {
-                Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
-            }
+//        findViewById<Button>(R.id.btnSubmitLogin).setOnClickListener {
+        binding.btnSubmitLogin.setOnClickListener {
+            // write logic to hanlde the button
+            val submittedEmail = binding.etUserEmail.text.toString()
+            val submittedPassword = binding.etUserPassword.text.toString()
 
             // TODO: Create the logic to verify user login details, EMAIL should be valid, Password must have 8 length including small/capital letters with digit and special characters
 
-
+            //Navigation to another activity
+            val intent = Intent(this, ScrollingActivity::class.java)
+            startActivity(intent)
         }
 
+        Log.d(MyTag, "OnCreate -> Attaches the UI, prepares the assets to be displayed.")
+
+//        val counterText = findViewById<TextView>(R.id.tvLoginTitle)
+//        findViewById<Button>(R.id.btnSubmitLogin).setOnClickListener {
+//            counter++
+//            counterText.text = counter.toString()
+//        }
     }
 
-    fun verifyEmail(email: String): Boolean {
-        return (email.contains("@") && email.contains(".com") && email.isNotEmpty())
+    override fun onStart() {
+        super.onStart()
+        Log.d(
+            MyTag,
+            "OnStart -> Allocates the memory for resources, preparing to display UI to the user"
+        )
     }
 
-    fun verifyPassword(password: String): Boolean {
-        val specialCharacterPattern = Regex("[^a-zA-Z0-9 ]")
-        val lowerCasePattern = Regex("[a-z]")
-        val upperCasePattern = Regex("[A-Z]")
-        return (password.length >= 8 && password.contains(specialCharacterPattern) && password.contains(
-            lowerCasePattern
-        ) && password.contains(upperCasePattern) && password.isNotEmpty())
-
+    override fun onResume() {
+        super.onResume()
+        Log.d(
+            MyTag,
+            "OnResume -> User can see and interact with the UI"
+        ) //only place user gets to interact
     }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(
+            MyTag,
+            "OnPause -> Puts the UI on temporary hold, all the assets are still alive just not visible to the USER"
+        )
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(
+            MyTag,
+            "OnStop -> Clear/free the memory resources, only exists the reference of elements"
+        )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(MyTag, "OnDestroy -> Destroys the reference of resources and activity itself")
+    }
+
 }
